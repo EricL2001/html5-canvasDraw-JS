@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+
+<div class="top">
+	<h1>Draw on the canvas below</h1>
+</div>
+<canvas id="draw" width="800" height="800"></canvas>
+
+<script>
+
+const canvas = document.querySelector('#draw');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+ctx.strokeStyle = '#FF9F33'; // start color  CTX is where we do the drawing on the canvas
+ctx.lineJoin = 'round'; // play around with
+ctx.lineCap = 'round'; // play around with
+ctx.lineWidth = 25; // sets line width...play around with
+
+let isDrawing = false; 
+let lastX = 0; // starting at X = 0...starting point on canvas
+let lastY = 0; // starting at Y = 0...starting point on canvas
+
+function draw(e) {
+	if(!isDrawing) return; // stop fnc from running when they are not moused down * ONLY RUNS FUNCTION WHEN MOUSE IS DOWN *
+	console.log(e);
+	ctx.beginPath(); // start from
+	ctx.moveTo(lastX, lastY); // go to
+	ctx.lineTo(e.offsetX, e.offsetY);  // these are coming from the event in the console log
+	ctx.stroke(); // actually implements the line drawing
+	[lastX, lastY] = [e.offsetX, e.offsetY];
+
+}
+
+canvas.addEventListener('mousedown', (e) => {
+	isDrawing = true;
+	[lastX, lastY] = [e.offsetX, e.offsetY]; // starts line at NEW POSITION on canvas
+}); // fires draw function when mouse hold is down
+canvas.addEventListener('mousemove', draw); // when move mouse on canvas it fires the draw function
+canvas.addEventListener('mouseup', () => isDrawing = false); // STOPS firing  when mouse hold is released
+canvas.addEventListener('mouseout', () => isDrawing = false); // STOPS firing when mouse is off canvas
+
+</script>
+
+<style>
+  html, body {
+    margin:0;
+  }
+
+  .top {
+  	text-align: center;
+  	border-bottom: 1px red solid;
+  	font-family: Monospace;
+
+  }
+
+</style>
+
+</body>
+</html>
